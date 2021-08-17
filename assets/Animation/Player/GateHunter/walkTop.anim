@@ -1,0 +1,49 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "walkTop",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.85,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "fcc48686-a7e5-429e-a408-2166804df442"
+            }
+          },
+          {
+            "frame": 0.25,
+            "value": {
+              "__uuid__": "979ff01d-7d37-4fdf-b3b5-b43d22c22b38"
+            }
+          },
+          {
+            "frame": 0.5,
+            "value": {
+              "__uuid__": "f283f3db-5e01-4caa-a7c0-f360ebb47df9"
+            }
+          },
+          {
+            "frame": 0.6666666666666666,
+            "value": {
+              "__uuid__": "338d7670-1fbd-41ce-8d07-bdf603ee15be"
+            }
+          },
+          {
+            "frame": 0.8333333333333334,
+            "value": {
+              "__uuid__": "338d7670-1fbd-41ce-8d07-bdf603ee15be"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

@@ -1,17 +1,13 @@
 const { ccclass, property } = cc._decorator;
-
-interface IMoveAnimation {
-  left: string;
-  right: string;
-  top: string;
-  bottom: string;
-}
-
 @ccclass
-export default class NewClass extends cc.Component {
+export default class NewClass  extends cc.Component {
+  public keys: Map<number, boolean> = new Map();
+
   @property()
   moveSpeed: number = 100;
 
+  @property()
+  idleBottomAnimation: string = "idleBottom";
   @property()
   moveLeftAnimation: string = "moveLeft";
   @property()
@@ -21,13 +17,35 @@ export default class NewClass extends cc.Component {
   @property()
   moveBottomAnimation: string = "moveBottom";
 
-  animator: cc.Animation;
-
-  onLoad() {}
-
-  start() {
-    this.animator = this.node.getComponent("Animation");
+  onKeyDown(e: cc.Event.EventCustom) {
+    this.keys.set(e.keyCode, true);
+  }
+  onKeyUp(e: cc.Event.EventCustom) {
+    this.keys.delete(e.keyCode);
   }
 
-  update(dt) {}
+  onLoad() {
+    cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
+    cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
+  }
+
+  update(dt) {
+    const movementDirection = new cc.Vec3(0, 0, 0);
+    this.keys.has(cc.macro.KEY.a)
+      ? (movementDirection.x = -1)
+      : this.keys.has(cc.macro.KEY.d)
+      ? (movementDirection.x = 1)
+      : 0;
+    this.keys.has(cc.macro.KEY.s)
+      ? (movementDirection.y = -1)
+      : this.keys.has(cc.macro.KEY.w)
+      ? (movementDirection.y = 1)
+      : 0;
+
+    this.node.setPosition(
+      this.node.position.x + movementDirection.x * this.moveSpeed * dt
+      this.node.position.y + movementDirection.y * this.moveSpeed * dt
+      this.node.position.z
+    );
+  }
 }

@@ -1,4 +1,6 @@
+import CustomAnimator from "../Common/CustomAnimator";
 const { ccclass, property } = cc._decorator;
+
 @ccclass
 export default class NewClass  extends cc.Component {
   public keys: Map<number, boolean> = new Map();
@@ -17,6 +19,8 @@ export default class NewClass  extends cc.Component {
   @property()
   moveBottomAnimation: string = "moveBottom";
 
+  customAnimator: CustomAnimator;
+
   onKeyDown(e: cc.Event.EventCustom) {
     this.keys.set(e.keyCode, true);
   }
@@ -27,6 +31,10 @@ export default class NewClass  extends cc.Component {
   onLoad() {
     cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
     cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
+  }
+
+  start() {
+    this.customAnimator = this.node.getComponent("CustomAnimator")
   }
 
   update(dt) {
@@ -47,5 +55,20 @@ export default class NewClass  extends cc.Component {
       this.node.position.y + movementDirection.y * this.moveSpeed * dt
       this.node.position.z
     );
+    if (movementDirection.x > 0) {
+      this.customAnimator.changeAnimation(this.moveRightAnimation)
+    }
+    else if (movementDirection.x < 0) {
+      this.customAnimator.changeAnimation(this.moveLeftAnimation)
+    }
+    else if (movementDirection.y > 0) {
+      this.customAnimator.changeAnimation(this.moveTopAnimation)
+    }
+    else if (movementDirection.y < 0) {
+      this.customAnimator.changeAnimation(this.moveBottomAnimation)
+    }
+    else {
+      this.customAnimator.changeAnimation(this.idleBottomAnimation)
+    }
   }
 }

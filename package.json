@@ -1,0 +1,23 @@
+{
+  "name": "rpg",
+  "version": "1.0.0",
+  "description": "Hello world new project template.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mateuszbuturla/RPG-Client.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mateuszbuturla/RPG-Client/issues"
+  },
+  "homepage": "https://github.com/mateuszbuturla/RPG-Client#readme",
+  "dependencies": {
+    "socket.io-client": "^4.1.3"
+  },
+  "devDependencies": {}
+}

@@ -293,7 +293,7 @@
     "_id": "e7KiDu2xpG9Z/s6whVhu69"
   },
   {
-    "__type__": "3e5b2pB0ARE5re1dXMgW0xY",
+    "__type__": "61582LlpNFIYKgEROP+/iAb",
     "_name": "",
     "_objFlags": 0,
     "node": {
@@ -303,7 +303,7 @@
     "playerPrefab": {
       "__uuid__": "e42c80d1-8dac-464b-97cd-817a4f5ea99a"
     },
-    "_id": "02kG9P1sNNLZnffd715Wjh"
+    "_id": "ff6G+g36dGcpsRZNAG3AFH"
   },
   {
     "__type__": "cc.Canvas",

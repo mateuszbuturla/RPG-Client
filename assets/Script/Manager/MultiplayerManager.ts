@@ -1,6 +1,12 @@
+import { IPlayerRes } from "../../../../rpg-server/src/types/player/player";
 import { io, Socket } from "socket.io-client/dist/socket.io.js";
 import { filterObject } from "../Utils/filterObject";
+import { IOtherPlayer } from "../../types/player";
 const { ccclass, property } = cc._decorator;
+
+interface INewPositionRes {
+  players: IPlayerRes[];
+}
 
 @ccclass
 export default class MultiplayerManager extends cc.Component {
@@ -8,8 +14,8 @@ export default class MultiplayerManager extends cc.Component {
   playerPrefab: cc.Prefab;
 
   socket: Socket;
-  playerList: any = {};
-  localPlayer: any;
+  playerList: IOtherPlayer = {};
+  localPlayer: cc.Node;
 
   start() {
     console.log("Starting connection to socket.io server");
@@ -25,7 +31,7 @@ export default class MultiplayerManager extends cc.Component {
       console.log(`Socket.ID: ${this.socket.id}`);
     });
 
-    this.socket.on("newPositions", (data) => {
+    this.socket.on("newPositions", (data: INewPositionRes) => {
       const scene = cc.director.getScene();
       const thisPlayer = data.players.find(
         (player) => player.id === this.socket.id

@@ -130,6 +130,15 @@
         "__uuid__": "4babd98a-d301-4b83-9f92-4c6faf5bc12c"
       },
       {
+        "__uuid__": "46eabc5a-34da-4afa-8975-6bb25af0907d"
+      },
+      {
+        "__uuid__": "585e07dc-3171-4315-bfb8-bfbfd13ef682"
+      },
+      {
+        "__uuid__": "b204fe6e-096c-4926-9cae-d38dc6428d8f"
+      },
+      {
         "__uuid__": "683fd741-1118-4020-88a9-276c31863352"
       },
       {
@@ -153,12 +162,8 @@
       "__id__": 1
     },
     "_enabled": true,
+    "localPlayer": true,
     "moveSpeed": 100,
-    "idleBottomAnimation": "IdleBottom",
-    "moveLeftAnimation": "WalkLeft",
-    "moveRightAnimation": "WalkRight",
-    "moveTopAnimation": "WalkTop",
-    "moveBottomAnimation": "WalkBottom",
     "_id": ""
   },
   {
@@ -177,7 +182,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "e42c80d1-8dac-464b-97cd-817a4f5ea99a"
     },
     "fileId": "",
     "sync": false

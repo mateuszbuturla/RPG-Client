@@ -1,7 +1,8 @@
-import { IPlayerRes } from "../../../../rpg-server/src/types/player/player";
+import { IPlayerRes } from "../../../../RPG-Server/src/types/player/player";
 import { io, Socket } from "socket.io-client/dist/socket.io.js";
 import { filterObject } from "../Utils/filterObject";
 import { IOtherPlayer } from "../../types/player";
+import PlayerMovement from "../Player/PlayerMovement";
 const { ccclass, property } = cc._decorator;
 
 interface INewPositionRes {
@@ -15,9 +16,10 @@ export default class MultiplayerManager extends cc.Component {
 
   socket: Socket;
   playerList: IOtherPlayer = {};
-  localPlayer: cc.Node;
+  scene: cc.Scene;
 
   start() {
+    this.scene = cc.director.getScene();
     console.log("Starting connection to socket.io server");
     this.socket = io("http://localhost:3000", {
       withCredentials: true,
@@ -32,36 +34,11 @@ export default class MultiplayerManager extends cc.Component {
     });
 
     this.socket.on("newPositions", (data: INewPositionRes) => {
-      const scene = cc.director.getScene();
-      const thisPlayer = data.players.find(
-        (player) => player.id === this.socket.id
-      );
-
-      if (thisPlayer) {
-        if (this.localPlayer) {
-          this.localPlayer.setPosition(
-            new cc.Vec3(thisPlayer.x, thisPlayer.y, 0)
-          );
-        } else {
-          const node = cc.instantiate(this.playerPrefab);
-          node.setPosition(new cc.Vec3(thisPlayer.x, thisPlayer.y, 0));
-          scene.addChild(node);
-          this.localPlayer = node;
-        }
-      }
       data.players.map((player) => {
-        if (player.id !== this.socket.id) {
-          if (!this.playerList.hasOwnProperty(player.id)) {
-            const node = cc.instantiate(this.playerPrefab);
-            node.setPosition(new cc.Vec3(player.x, player.y, 0));
-            node.removeComponent("PlayerMovement");
-            scene.addChild(node);
-            this.playerList[player.id] = { id: player.id, node: node };
-          } else {
-            this.playerList[player.id].node.setPosition(
-              new cc.Vec3(player.x, player.y, 0)
-            );
-          }
+        if (!this.playerList.hasOwnProperty(player.id)) {
+          this.createNewPlayer(player);
+        } else {
+          this.updatePlayerNode(this.playerList[player.id].node, player);
         }
       });
 
@@ -77,5 +54,22 @@ export default class MultiplayerManager extends cc.Component {
     });
 
     global.socket = this.socket;
+  }
+
+  createNewPlayer(data: IPlayerRes): void {
+    const node = cc.instantiate(this.playerPrefab);
+    node.setPosition(new cc.Vec3(data.position.x, data.position.y, 0));
+    node.getComponent(PlayerMovement).localPlayer = data.id === this.socket.id;
+    this.scene.addChild(node);
+    this.playerList[data.id] = { id: data.id, node: node };
+  }
+
+  updatePlayerNode(node: cc.Node, data: IPlayerRes): void {
+    node.setPosition(new cc.Vec3(data.position.x, data.position.y, 0));
+    node
+      .getComponent(PlayerMovement)
+      .updateMoveAnimation(
+        new cc.Vec2(data.moveDirection.x, data.moveDirection.y)
+      );
   }
 }

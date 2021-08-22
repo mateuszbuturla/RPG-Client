@@ -1,6 +1,6 @@
 {
   "ver": "2.3.7",
-  "uuid": "c5369a2a-157a-444c-9c57-236185d0a392",
+  "uuid": "7418c58b-3606-4286-bde9-1c014527570c",
   "importer": "texture",
   "type": "sprite",
   "wrapMode": "clamp",
@@ -12,11 +12,11 @@
   "height": 16,
   "platformSettings": {},
   "subMetas": {
-    "gateHunterWalkBottom4": {
+    "gateHunterWalkDown2": {
       "ver": "1.0.6",
-      "uuid": "f3a0e8d9-363f-4430-93ad-86f33208b6cd",
+      "uuid": "cebeb931-13fc-4c1f-a3e7-2fec620a46fa",
       "importer": "sprite-frame",
-      "rawTextureUuid": "c5369a2a-157a-444c-9c57-236185d0a392",
+      "rawTextureUuid": "7418c58b-3606-4286-bde9-1c014527570c",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,

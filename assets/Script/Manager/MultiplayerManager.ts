@@ -3,6 +3,8 @@ import { io, Socket } from "socket.io-client/dist/socket.io.js";
 import { filterObject } from "../Utils/filterObject";
 import { IOtherPlayer } from "../../types/player";
 import PlayerMovement from "../Player/PlayerMovement";
+import PlayerHealth from "../Player/PlayerHealth";
+import Health from "../Common/Health";
 const { ccclass, property } = cc._decorator;
 
 interface INewPositionRes {
@@ -60,6 +62,10 @@ export default class MultiplayerManager extends cc.Component {
     const node = cc.instantiate(this.playerPrefab);
     node.setPosition(new cc.Vec3(data.position.x, data.position.y, 0));
     node.getComponent(PlayerMovement).localPlayer = data.id === this.socket.id;
+    if (data.id !== this.socket.id) {
+      node.removeComponent(PlayerHealth);
+      node.addComponent(Health);
+    }
     this.scene.addChild(node);
     this.playerList[data.id] = { id: data.id, node: node };
   }

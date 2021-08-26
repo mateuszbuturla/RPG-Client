@@ -2,11 +2,16 @@
   "collision-matrix": [
     [
       true
+    ],
+    [
+      false,
+      false
     ]
   ],
   "excluded-modules": [],
   "group-list": [
-    "default"
+    "default",
+    "lava"
   ],
   "start-scene": "2d2f792f-a40c-49bb-a189-ed176a246e49",
   "design-resolution-width": 960,
@@ -15,7 +20,7 @@
   "fit-height": true,
   "use-project-simulator-setting": false,
   "simulator-orientation": false,
-  "use-customize-simulator": false,
+  "use-customize-simulator": true,
   "simulator-resolution": {
     "width": 960,
     "height": 640
@@ -31,5 +36,7 @@
     "audience": {
       "enable": false
     }
-  }
+  },
+  "preview-port": 7456,
+  "clear-simulator-cache": true
 }

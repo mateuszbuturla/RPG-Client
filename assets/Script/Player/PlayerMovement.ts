@@ -53,7 +53,6 @@ export default class NewClass extends cc.Component {
         global.socket.emit("keyPress", { inputId: "left", state: true });
       if (this.keys.has(cc.macro.KEY.w))
         global.socket.emit("keyPress", { inputId: "up", state: true });
-      }
     }
   }
 

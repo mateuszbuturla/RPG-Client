@@ -39,10 +39,13 @@
       },
       {
         "__id__": 8
+      },
+      {
+        "__id__": 9
       }
     ],
     "_prefab": {
-      "__id__": 9
+      "__id__": 10
     },
     "_opacity": 255,
     "_color": {
@@ -225,6 +228,19 @@
     },
     "_enabled": true,
     "tag": "player",
+    "_id": ""
+  },
+  {
+    "__type__": "5802dUKr6BC2qzAXFhZtrF/",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "inventory": [],
+    "slotsCountX": 4,
+    "slotsCountY": 4,
     "_id": ""
   },
   {

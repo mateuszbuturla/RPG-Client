@@ -1,6 +1,7 @@
 import CustomAnimator from "../Common/CustomAnimator";
 const { ccclass, property } = cc._decorator;
 import { io } from "socket.io-client/dist/socket.io.js";
+import Collision from "../Common/Collision";
 
 @ccclass
 export default class NewClass extends cc.Component {

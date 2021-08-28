@@ -9,21 +9,25 @@ const tempItemDB = [
     id: 0,
     name: "none",
     description: "none",
+    slug: "",
   }),
   new Item({
     id: 1,
     name: "item 1",
     description: "desc item 1",
+    slug: "bow",
   }),
   new Item({
     id: 2,
     name: "item 2",
     description: "desc item 2",
+    slug: "bow2",
   }),
   new Item({
     id: 3,
     name: "item 3",
     description: "desc item 3",
+    slug: "bow3",
   }),
 ];
 
@@ -49,9 +53,9 @@ export default class PlayerInventory extends cc.Component {
   start() {
     this.isLocalPlayer = this.node.getComponent(PlayerMovement).localPlayer;
     if (this.isLocalPlayer) {
-      this.inventoryPanel = cc.find("UI/Inventory");
+      this.inventoryPanel = cc.find("UI/Inventory/InventoryPanel");
       this.inventorySlotContainer = cc.find(
-        "UI/Inventory/InventorySlotsContainer"
+        "UI/Inventory/InventoryPanel/InventorySlotsContainer"
       );
       this.inventoryPanel.active = this.inventoryIsShow;
       cc.systemEvent.on(
@@ -77,9 +81,11 @@ export default class PlayerInventory extends cc.Component {
     const scene = cc.director.getScene();
     for (let x = 0; x < this.slotsCountX; x++) {
       for (let y = 0; y < this.slotsCountY; y++) {
+        let node = null;
         if (this.isLocalPlayer) {
           if (this.inventorySlotContainer) {
-            const node = cc.instantiate(this.slotPrefab);
+            node = cc.instantiate(this.slotPrefab);
+            node.name = `Slot${slotId}`;
             node.parent = this.inventorySlotContainer;
           } else {
             cc.error("Inventory slots panel is not defind");
@@ -91,6 +97,7 @@ export default class PlayerInventory extends cc.Component {
             id: slotId,
             item: tempItemDB[0],
             count: 0,
+            node: node,
           }),
         ];
         slotId++;
@@ -103,7 +110,7 @@ export default class PlayerInventory extends cc.Component {
 
     for (let i = 0; i < this.inventory.length; i++) {
       if (this.inventory[i].item.id === 0) {
-        this.inventory[i].item = findItem;
+        this.inventory[i].updateItem(findItem);
         break;
       }
     }
@@ -116,7 +123,5 @@ export default class PlayerInventory extends cc.Component {
     this.inventoryPanel.active = this.inventoryIsShow;
   }
 
-  update(): void {
-    // console.log(this.inventory.map((slot) => slot.item.name));
-  }
+  update(): void {}
 }

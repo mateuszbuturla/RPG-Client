@@ -40,6 +40,8 @@ export default class PlayerInventory extends cc.Component {
   @property()
   slotsCountY: number = 4;
 
+  inventoryPanel: cc.Node;
+  inventoryIsShow: boolean = false;
   inventorySlotContainer: cc.Node;
 
   isLocalPlayer: boolean = false;
@@ -47,14 +49,27 @@ export default class PlayerInventory extends cc.Component {
   start() {
     this.isLocalPlayer = this.node.getComponent(PlayerMovement).localPlayer;
     if (this.isLocalPlayer) {
+      this.inventoryPanel = cc.find("UI/Inventory");
       this.inventorySlotContainer = cc.find(
         "UI/Inventory/InventorySlotsContainer"
       );
+      this.inventoryPanel.active = this.inventoryIsShow;
+      cc.systemEvent.on(
+        cc.SystemEvent.EventType.KEY_DOWN,
+        this.onKeyDown,
+        this
+      );
+      cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
     }
     this.generateSlots();
     setInterval(() => {
       this.addItem(1);
     }, 200);
+  }
+
+  onKeyDown(e: cc.Event.EventCustom) {}
+  onKeyUp(e: cc.Event.EventCustom) {
+    if (e.keyCode === cc.macro.KEY.i) this.toogleInventoryVisibility();
   }
 
   generateSlots(): void {
@@ -94,6 +109,11 @@ export default class PlayerInventory extends cc.Component {
     }
 
     console.log("No empty slot in inventory");
+  }
+
+  toogleInventoryVisibility(): void {
+    this.inventoryIsShow = !this.inventoryIsShow;
+    this.inventoryPanel.active = this.inventoryIsShow;
   }
 
   update(): void {

@@ -239,6 +239,9 @@
     },
     "_enabled": true,
     "inventory": [],
+    "slotPrefab": {
+      "__uuid__": "826f4daf-1f91-425a-9653-c1cd20fb3792"
+    },
     "slotsCountX": 4,
     "slotsCountY": 4,
     "_id": ""

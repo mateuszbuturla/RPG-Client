@@ -1,3 +1,4 @@
+import PlayerMovement from "../PlayerMovement";
 import Item from "./Item";
 import Slot from "./Slot";
 
@@ -30,13 +31,26 @@ const tempItemDB = [
 export default class PlayerInventory extends cc.Component {
   @property(Slot)
   inventory: Slot[] = [];
-
+  @property()
+  slots: cc.Node[] = [];
+  @property(cc.Prefab)
+  slotPrefab: cc.Prefab;
   @property()
   slotsCountX: number = 4;
   @property()
   slotsCountY: number = 4;
 
+  inventorySlotContainer: cc.Node;
+
+  isLocalPlayer: boolean = false;
+
   start() {
+    this.isLocalPlayer = this.node.getComponent(PlayerMovement).localPlayer;
+    if (this.isLocalPlayer) {
+      this.inventorySlotContainer = cc.find(
+        "UI/Inventory/InventorySlotsContainer"
+      );
+    }
     this.generateSlots();
     setInterval(() => {
       this.addItem(1);
@@ -45,8 +59,17 @@ export default class PlayerInventory extends cc.Component {
 
   generateSlots(): void {
     let slotId = 0;
+    const scene = cc.director.getScene();
     for (let x = 0; x < this.slotsCountX; x++) {
       for (let y = 0; y < this.slotsCountY; y++) {
+        if (this.isLocalPlayer) {
+          if (this.inventorySlotContainer) {
+            const node = cc.instantiate(this.slotPrefab);
+            node.parent = this.inventorySlotContainer;
+          } else {
+            cc.error("Inventory slots panel is not defind");
+          }
+        }
         this.inventory = [
           ...this.inventory,
           new Slot({
@@ -74,6 +97,6 @@ export default class PlayerInventory extends cc.Component {
   }
 
   update(): void {
-    console.log(this.inventory.map((slot) => slot.item.name));
+    // console.log(this.inventory.map((slot) => slot.item.name));
   }
 }

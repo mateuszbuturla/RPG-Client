@@ -1,5 +1,6 @@
 import PlayerMovement from "../PlayerMovement";
 import Item from "./Item";
+import ItemDescription from "./ItemDescription";
 import Slot from "./Slot";
 
 const { ccclass, property } = cc._decorator;
@@ -44,9 +45,11 @@ export default class PlayerInventory extends cc.Component {
   @property()
   slotsCountY: number = 4;
 
+  cursorOnSlot: number = -1;
   inventoryPanel: cc.Node;
   inventoryIsShow: boolean = false;
   inventorySlotContainer: cc.Node;
+  itemDescriptionPanel: cc.Node;
 
   isLocalPlayer: boolean = false;
 
@@ -57,6 +60,9 @@ export default class PlayerInventory extends cc.Component {
       this.inventorySlotContainer = cc.find(
         "UI/Inventory/InventoryPanel/InventorySlotsContainer"
       );
+      this.itemDescriptionPanel = cc
+        .find("UI/Inventory")
+        .getChildByName("ItemDescription");
       this.inventoryPanel.active = this.inventoryIsShow;
       cc.systemEvent.on(
         cc.SystemEvent.EventType.KEY_DOWN,
@@ -98,6 +104,7 @@ export default class PlayerInventory extends cc.Component {
             item: tempItemDB[0],
             count: 0,
             node: node,
+            playerInventory: this.node.getComponent(PlayerInventory),
           }),
         ];
         slotId++;
@@ -119,8 +126,25 @@ export default class PlayerInventory extends cc.Component {
   }
 
   toogleInventoryVisibility(): void {
+    console.log(this.inventoryPanel);
     this.inventoryIsShow = !this.inventoryIsShow;
     this.inventoryPanel.active = this.inventoryIsShow;
+  }
+
+  setHoverSlot(slotId: number): void {
+    this.cursorOnSlot = slotId;
+    if (slotId !== -1) {
+      this.itemDescriptionPanel
+        .getComponent(ItemDescription)
+        .changeDescriptionActiveStatus(true);
+      this.itemDescriptionPanel
+        .getComponent(ItemDescription)
+        .setItemDescription(this.inventory[slotId].item);
+    } else {
+      this.itemDescriptionPanel
+        .getComponent(ItemDescription)
+        .changeDescriptionActiveStatus(false);
+    }
   }
 
   update(): void {}

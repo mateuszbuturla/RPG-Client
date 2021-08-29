@@ -1,4 +1,5 @@
 import PlayerMovement from "../PlayerMovement";
+import DraggingItem from "./DraggingItem";
 import Item from "./Item";
 import ItemDescription from "./ItemDescription";
 import Slot from "./Slot";
@@ -50,6 +51,9 @@ export default class PlayerInventory extends cc.Component {
   inventoryIsShow: boolean = false;
   inventorySlotContainer: cc.Node;
   itemDescriptionPanel: cc.Node;
+  draggingItemPanel: DraggingItem;
+  draggingItem: Item;
+  prevousItemSlot: number = -1;
 
   isLocalPlayer: boolean = false;
 
@@ -63,6 +67,10 @@ export default class PlayerInventory extends cc.Component {
       this.itemDescriptionPanel = cc
         .find("UI/Inventory")
         .getChildByName("ItemDescription");
+      this.draggingItemPanel = cc
+        .find("UI/Inventory")
+        .getChildByName("DraggingItem")
+        .getComponent(DraggingItem);
       this.inventoryPanel.active = this.inventoryIsShow;
       cc.systemEvent.on(
         cc.SystemEvent.EventType.KEY_DOWN,
@@ -70,16 +78,26 @@ export default class PlayerInventory extends cc.Component {
         this
       );
       cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
+      cc.find("UI").on(
+        cc.Node.EventType.MOUSE_DOWN,
+        (e: cc.Event.EventMouse) => {
+          this.startDraggingItem();
+        }
+      );
+      cc.find("UI").on(cc.Node.EventType.MOUSE_UP, (e: cc.Event.EventMouse) => {
+        this.endDraggingItem();
+      });
     }
     this.generateSlots();
-    setInterval(() => {
-      this.addItem(1);
-    }, 200);
   }
 
   onKeyDown(e: cc.Event.EventCustom) {}
   onKeyUp(e: cc.Event.EventCustom) {
     if (e.keyCode === cc.macro.KEY.i) this.toogleInventoryVisibility();
+    if (e.keyCode === cc.macro.KEY.p) this.addItem(1);
+    if (e.keyCode === cc.macro.KEY.o) this.addItem(2);
+    if (e.keyCode === cc.macro.KEY.l) this.addItem(3);
+    if (e.keyCode === cc.macro.KEY.m) this.startDraggingItem(2);
   }
 
   generateSlots(): void {
@@ -101,7 +119,7 @@ export default class PlayerInventory extends cc.Component {
           ...this.inventory,
           new Slot({
             id: slotId,
-            item: tempItemDB[0],
+            item: null,
             count: 0,
             node: node,
             playerInventory: this.node.getComponent(PlayerInventory),
@@ -116,7 +134,7 @@ export default class PlayerInventory extends cc.Component {
     const findItem = tempItemDB.find((item) => item.id === itemId);
 
     for (let i = 0; i < this.inventory.length; i++) {
-      if (this.inventory[i].item.id === 0) {
+      if (this.inventory[i].item === null) {
         this.inventory[i].updateItem(findItem);
         break;
       }
@@ -144,6 +162,37 @@ export default class PlayerInventory extends cc.Component {
       this.itemDescriptionPanel
         .getComponent(ItemDescription)
         .changeDescriptionActiveStatus(false);
+    }
+  }
+
+  startDraggingItem(): void {
+    const slot = this.cursorOnSlot;
+    if (!this.draggingItem && slot !== -1) {
+      this.prevousItemSlot = slot;
+      this.draggingItem = this.inventory[slot].item;
+      this.inventory[slot].updateItem(null);
+      this.draggingItemPanel.setDraggingItem(this.draggingItem);
+      this.draggingItemPanel.changeIsDraggingStatus(true);
+    }
+  }
+
+  endDraggingItem(): void {
+    if (this.draggingItem) {
+      if (this.cursorOnSlot === -1) {
+        //drop item
+      } else {
+        if (this.inventory[this.cursorOnSlot].item === null) {
+          this.inventory[this.cursorOnSlot].updateItem(this.draggingItem);
+        } else {
+          this.inventory[this.prevousItemSlot].updateItem(
+            this.inventory[this.cursorOnSlot].item
+          );
+          this.inventory[this.cursorOnSlot].updateItem(this.draggingItem);
+          this.prevousItemSlot = -1;
+        }
+      }
+      this.draggingItem = null;
+      this.draggingItemPanel.changeIsDraggingStatus(false);
     }
   }
 

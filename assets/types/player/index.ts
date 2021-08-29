@@ -1,2 +1,2 @@
 export * from "./player";
-export * from "./Inventory";
+export * from "./Inventory/Inventory";

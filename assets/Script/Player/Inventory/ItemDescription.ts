@@ -6,7 +6,6 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export default class ItemDescription extends cc.Component {
   description: cc.Node;
-  isShow: boolean = false;
 
   mouseManager: MouseManager;
 
@@ -16,12 +15,13 @@ export default class ItemDescription extends cc.Component {
   }
 
   setItemDescription(item: Item): void {
-    this.description.getComponent(cc.RichText).string = item.description;
+    if (item) {
+      this.description.getComponent(cc.RichText).string = item.description;
+    }
   }
 
   changeDescriptionActiveStatus(status: boolean): void {
     this.description.active = status;
-    this.isShow = status;
   }
 
   update() {

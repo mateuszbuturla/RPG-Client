@@ -26,9 +26,14 @@ export default class Slot {
 
   updateItem(item: Item): void {
     this.item = item;
-    this.node.getChildByName("Item").getComponent(cc.Sprite).spriteFrame =
-      cc.assetManager
-        .getBundle("iconsBundle")
-        .get(`Items/${item.slug}`, cc.SpriteFrame);
+    if (item) {
+      this.node.getChildByName("Item").getComponent(cc.Sprite).spriteFrame =
+        cc.assetManager
+          .getBundle("iconsBundle")
+          .get(`Items/${item.slug}`, cc.SpriteFrame);
+    } else {
+      this.node.getChildByName("Item").getComponent(cc.Sprite).spriteFrame =
+        null;
+    }
   }
 }

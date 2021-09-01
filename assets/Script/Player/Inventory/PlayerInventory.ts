@@ -21,6 +21,11 @@ const tempItemDB = [
     description: "desc item 1",
     slug: "bow",
     type: ItemType.WEAPON,
+    armor: 1,
+    healthRegeneration: 5,
+    health: 3,
+    mana: 2,
+    manaRegeneration: 6,
   }),
   new Item({
     id: 2,
@@ -28,6 +33,9 @@ const tempItemDB = [
     description: "desc item 2",
     slug: "bow2",
     type: ItemType.WEAPON,
+    strength: 3,
+    intelligence: 5,
+    dexterity: 1,
   }),
   new Item({
     id: 3,

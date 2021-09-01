@@ -18,6 +18,8 @@ export interface IItemConstructor {
   name: string;
   description: string;
   slug: string;
+  health?: number;
+  mana?: number;
   healthRegeneration?: number;
   manaRegeneration?: number;
   armor?: number;

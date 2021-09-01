@@ -20,6 +20,8 @@ export default class Item {
     name,
     description,
     slug,
+    health,
+    mana,
     healthRegeneration,
     manaRegeneration,
     armor,
@@ -31,6 +33,8 @@ export default class Item {
     this.name = name;
     this.description = description;
     this.slug = slug;
+    this.health = health;
+    this.mana = mana;
     this.healthRegeneration = healthRegeneration;
     this.manaRegeneration = manaRegeneration;
     this.armor = armor;

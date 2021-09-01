@@ -1,3 +1,4 @@
+import { ItemType } from "../../../types/player";
 import PlayerMovement from "../PlayerMovement";
 import DraggingItem from "./DraggingItem";
 import Item from "./Item";
@@ -12,24 +13,28 @@ const tempItemDB = [
     name: "none",
     description: "none",
     slug: "",
+    type: ItemType.NONE,
   }),
   new Item({
     id: 1,
     name: "item 1",
     description: "desc item 1",
     slug: "bow",
+    type: ItemType.WEAPON,
   }),
   new Item({
     id: 2,
     name: "item 2",
     description: "desc item 2",
     slug: "bow2",
+    type: ItemType.WEAPON,
   }),
   new Item({
     id: 3,
     name: "item 3",
     description: "desc item 3",
     slug: "bow3",
+    type: ItemType.WEAPON,
   }),
 ];
 

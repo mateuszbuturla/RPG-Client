@@ -42,11 +42,10 @@ export default class PlayerInventory extends cc.Component {
   @property(cc.Prefab)
   slotPrefab: cc.Prefab;
   @property()
-  slotsCountX: number = 4;
-  @property()
-  slotsCountY: number = 4;
+  slotsCount: number = 21;
 
   cursorOnSlot: number = -1;
+  inventoryMainPanel: cc.Node;
   inventoryPanel: cc.Node;
   inventoryIsShow: boolean = false;
   inventorySlotContainer: cc.Node;
@@ -60,18 +59,18 @@ export default class PlayerInventory extends cc.Component {
   start() {
     this.isLocalPlayer = this.node.getComponent(PlayerMovement).localPlayer;
     if (this.isLocalPlayer) {
-      this.inventoryPanel = cc.find("UI/Inventory/InventoryPanel");
-      this.inventorySlotContainer = cc.find(
-        "UI/Inventory/InventoryPanel/InventorySlotsContainer"
+      this.inventoryMainPanel = cc.find("UI/Inventory");
+      this.inventoryPanel =
+        this.inventoryMainPanel.getChildByName("InventoryPanel");
+      this.inventorySlotContainer = this.inventoryPanel.getChildByName(
+        "InventorySlotsContainer"
       );
-      this.itemDescriptionPanel = cc
-        .find("UI/Inventory")
-        .getChildByName("ItemDescription");
-      this.draggingItemPanel = cc
-        .find("UI/Inventory")
+      this.itemDescriptionPanel =
+        this.inventoryMainPanel.getChildByName("ItemDescription");
+      this.draggingItemPanel = this.inventoryMainPanel
         .getChildByName("DraggingItem")
         .getComponent(DraggingItem);
-      this.inventoryPanel.active = this.inventoryIsShow;
+      this.inventoryMainPanel.active = this.inventoryIsShow;
       cc.systemEvent.on(
         cc.SystemEvent.EventType.KEY_DOWN,
         this.onKeyDown,
@@ -101,32 +100,28 @@ export default class PlayerInventory extends cc.Component {
   }
 
   generateSlots(): void {
-    let slotId = 0;
     const scene = cc.director.getScene();
-    for (let x = 0; x < this.slotsCountX; x++) {
-      for (let y = 0; y < this.slotsCountY; y++) {
-        let node = null;
-        if (this.isLocalPlayer) {
-          if (this.inventorySlotContainer) {
-            node = cc.instantiate(this.slotPrefab);
-            node.name = `Slot${slotId}`;
-            node.parent = this.inventorySlotContainer;
-          } else {
-            cc.error("Inventory slots panel is not defind");
-          }
+    for (let x = 0; x < this.slotsCount; x++) {
+      let node = null;
+      if (this.isLocalPlayer) {
+        if (this.inventorySlotContainer) {
+          node = cc.instantiate(this.slotPrefab);
+          node.name = `Slot${x}`;
+          node.parent = this.inventorySlotContainer;
+        } else {
+          cc.error("Inventory slots panel is not defind");
         }
-        this.inventory = [
-          ...this.inventory,
-          new Slot({
-            id: slotId,
-            item: null,
-            count: 0,
-            node: node,
-            playerInventory: this.node.getComponent(PlayerInventory),
-          }),
-        ];
-        slotId++;
       }
+      this.inventory = [
+        ...this.inventory,
+        new Slot({
+          id: x,
+          item: null,
+          count: 0,
+          node: node,
+          playerInventory: this.node.getComponent(PlayerInventory),
+        }),
+      ];
     }
   }
 
@@ -144,9 +139,8 @@ export default class PlayerInventory extends cc.Component {
   }
 
   toogleInventoryVisibility(): void {
-    console.log(this.inventoryPanel);
     this.inventoryIsShow = !this.inventoryIsShow;
-    this.inventoryPanel.active = this.inventoryIsShow;
+    this.inventoryMainPanel.active = this.inventoryIsShow;
   }
 
   setHoverSlot(slotId: number): void {

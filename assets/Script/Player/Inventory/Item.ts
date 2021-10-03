@@ -13,6 +13,7 @@ export default class Item {
   strength?: number;
   intelligence?: number;
   dexterity?: number;
+  stackable: boolean;
   type: ItemType;
 
   constructor({
@@ -28,6 +29,7 @@ export default class Item {
     strength,
     intelligence,
     dexterity,
+    stackable,
   }: IItemConstructor) {
     this.id = id;
     this.name = name;
@@ -41,5 +43,6 @@ export default class Item {
     this.strength = strength;
     this.intelligence = intelligence;
     this.dexterity = dexterity;
+    this.stackable = stackable;
   }
 }

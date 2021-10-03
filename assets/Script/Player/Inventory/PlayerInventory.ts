@@ -43,6 +43,7 @@ const tempItemDB = [
     description: "desc item 3",
     slug: "bow3",
     type: ItemType.WEAPON,
+    stackable: true,
   }),
 ];
 
@@ -141,9 +142,19 @@ export default class PlayerInventory extends cc.Component {
   addItem(itemId: number): void {
     const findItem = tempItemDB.find((item) => item.id === itemId);
 
+    const findStack = this.inventory.find(
+      (slot) => slot.item && slot.item.id === findItem.id
+    );
+
     for (let i = 0; i < this.inventory.length; i++) {
-      if (this.inventory[i].item === null) {
-        this.inventory[i].updateItem(findItem);
+      if (!findItem.stackable || (findItem.stackable && !findStack)) {
+        if (this.inventory[i].item === null) {
+          this.inventory[i].updateItem(findItem);
+          this.inventory[i].updateCount(1);
+          break;
+        }
+      } else {
+        this.inventory[i].updateCount(this.inventory[i].count + 1);
         break;
       }
     }

@@ -26,6 +26,7 @@ export interface IItemConstructor {
   strength?: number;
   intelligence?: number;
   dexterity?: number;
+  stackable?: boolean;
   type: ItemType;
 }
 

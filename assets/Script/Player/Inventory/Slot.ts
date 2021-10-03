@@ -31,9 +31,24 @@ export default class Slot {
         cc.assetManager
           .getBundle("iconsBundle")
           .get(`Items/${item.slug}`, cc.SpriteFrame);
+      if (item.stackable) {
+        this.node.getChildByName("Count").active = true;
+        this.node
+          .getChildByName("Count")
+          .getComponent(cc.Label).string = `${this.count}`;
+      } else {
+        this.node.getChildByName("Count").active = false;
+      }
     } else {
       this.node.getChildByName("Item").getComponent(cc.Sprite).spriteFrame =
         null;
     }
+  }
+
+  updateCount(count: number): void {
+    this.count = count;
+    this.node
+      .getChildByName("Count")
+      .getComponent(cc.Label).string = `${this.count}`;
   }
 }

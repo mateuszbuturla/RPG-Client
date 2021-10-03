@@ -26,8 +26,9 @@ export default class ItemDescription extends cc.Component {
   }
 
   changeDescriptionActiveStatus(status: boolean): void {
-    this.itemName.active = status;
-    this.description.active = status;
+    // this.itemName.active = status;
+    // this.description.active = status;
+    this.itemName.parent.active = status;
   }
 
   update() {

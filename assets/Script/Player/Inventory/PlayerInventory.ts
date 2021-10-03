@@ -159,12 +159,18 @@ export default class PlayerInventory extends cc.Component {
   setHoverSlot(slotId: number): void {
     this.cursorOnSlot = slotId;
     if (slotId !== -1) {
-      this.itemDescriptionPanel
-        .getComponent(ItemDescription)
-        .changeDescriptionActiveStatus(true);
-      this.itemDescriptionPanel
-        .getComponent(ItemDescription)
-        .setItemDescription(this.inventory[slotId].item);
+      if (this.inventory[slotId].item.id !== -1) {
+        this.itemDescriptionPanel
+          .getComponent(ItemDescription)
+          .changeDescriptionActiveStatus(true);
+        this.itemDescriptionPanel
+          .getComponent(ItemDescription)
+          .setItemDescription(this.inventory[slotId].item);
+      } else {
+        this.itemDescriptionPanel
+          .getComponent(ItemDescription)
+          .changeDescriptionActiveStatus(false);
+      }
     } else {
       this.itemDescriptionPanel
         .getComponent(ItemDescription)

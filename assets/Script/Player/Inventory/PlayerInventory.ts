@@ -131,7 +131,6 @@ export default class PlayerInventory extends cc.Component {
         new Slot({
           id: x,
           item: null,
-          count: 0,
           node: node,
           playerInventory: this.node.getComponent(PlayerInventory),
         }),
@@ -150,11 +149,10 @@ export default class PlayerInventory extends cc.Component {
       if (!findItem.stackable || (findItem.stackable && !findStack)) {
         if (this.inventory[i].item === null) {
           this.inventory[i].updateItem(findItem);
-          this.inventory[i].updateCount(1);
           break;
         }
       } else {
-        this.inventory[i].updateCount(this.inventory[i].count + 1);
+        this.inventory[findStack.id].updateCount(1);
         break;
       }
     }
@@ -170,7 +168,10 @@ export default class PlayerInventory extends cc.Component {
   setHoverSlot(slotId: number): void {
     this.cursorOnSlot = slotId;
     if (slotId !== -1) {
-      if (this.inventory[slotId].item.id !== -1) {
+      if (
+        this.inventory[slotId].item &&
+        this.inventory[slotId].item.id !== -1
+      ) {
         this.itemDescriptionPanel
           .getComponent(ItemDescription)
           .changeDescriptionActiveStatus(true);
@@ -206,6 +207,7 @@ export default class PlayerInventory extends cc.Component {
         //drop item
       } else {
         if (this.inventory[this.cursorOnSlot].item === null) {
+          this.inventory[this.prevousItemSlot].hideCountLabel();
           this.inventory[this.cursorOnSlot].updateItem(this.draggingItem);
         } else {
           this.inventory[this.prevousItemSlot].updateItem(

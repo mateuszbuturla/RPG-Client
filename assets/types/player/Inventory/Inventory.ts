@@ -28,12 +28,12 @@ export interface IItemConstructor {
   dexterity?: number;
   stackable?: boolean;
   type: ItemType;
+  count?: number;
 }
 
 export interface ISlotConstructor {
   id: number;
   item: Item;
-  count: number;
   node: cc.Node;
   playerInventory: PlayerInventory;
 }

@@ -5,14 +5,12 @@ import PlayerInventory from "./PlayerInventory";
 export default class Slot {
   id: number;
   item: Item;
-  count: number;
   node: cc.Node;
   playerInventory: PlayerInventory;
 
-  constructor({ id, item, count, node, playerInventory }: ISlotConstructor) {
+  constructor({ id, item, node, playerInventory }: ISlotConstructor) {
     this.id = id;
     this.item = item;
-    this.count = count;
     this.node = node;
     this.playerInventory = playerInventory;
 
@@ -22,6 +20,8 @@ export default class Slot {
     this.node.on("mouseleave", () => {
       this.playerInventory.setHoverSlot(-1);
     });
+
+    this.node.getChildByName("Count").active = false;
   }
 
   updateItem(item: Item): void {
@@ -35,9 +35,12 @@ export default class Slot {
         this.node.getChildByName("Count").active = true;
         this.node
           .getChildByName("Count")
-          .getComponent(cc.Label).string = `${this.count}`;
+          .getComponent(cc.Label).string = `${this.item.count}`;
       } else {
         this.node.getChildByName("Count").active = false;
+        this.node
+          .getChildByName("Count")
+          .getComponent(cc.Label).string = `${this.item.count}`;
       }
     } else {
       this.node.getChildByName("Item").getComponent(cc.Sprite).spriteFrame =
@@ -46,9 +49,15 @@ export default class Slot {
   }
 
   updateCount(count: number): void {
-    this.count = count;
-    this.node
-      .getChildByName("Count")
-      .getComponent(cc.Label).string = `${this.count}`;
+    if (this.item) {
+      this.item.count = this.item.count + count;
+      this.node
+        .getChildByName("Count")
+        .getComponent(cc.Label).string = `${this.item.count}`;
+    }
+  }
+
+  hideCountLabel(): void {
+    this.node.getChildByName("Count").active = false;
   }
 }

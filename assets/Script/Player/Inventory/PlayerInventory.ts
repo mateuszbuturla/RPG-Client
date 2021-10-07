@@ -51,8 +51,8 @@ const tempItemDB = [
 export default class PlayerInventory extends cc.Component {
   @property(Slot)
   inventory: Slot[] = [];
-  @property()
-  slots: cc.Node[] = [];
+  @property(Slot)
+  equipment: Slot[] = [];
   @property(cc.Prefab)
   slotPrefab: cc.Prefab;
   @property()
@@ -63,6 +63,8 @@ export default class PlayerInventory extends cc.Component {
   inventoryPanel: cc.Node;
   inventoryIsShow: boolean = false;
   inventorySlotContainer: cc.Node;
+  equipmentPanel: cc.Node;
+  equipmentSlotContainer: cc.Node;
   itemDescriptionPanel: cc.Node;
   draggingItemPanel: DraggingItem;
   draggingItem: Item;
@@ -79,6 +81,10 @@ export default class PlayerInventory extends cc.Component {
       this.inventorySlotContainer = this.inventoryPanel.getChildByName(
         "InventorySlotsContainer"
       );
+      this.equipmentPanel =
+        this.inventoryMainPanel.getChildByName("EquipmentPanel");
+      this.equipmentSlotContainer =
+        this.equipmentPanel.getChildByName("EquipmentSlotPanel");
       this.itemDescriptionPanel =
         this.inventoryMainPanel.getChildByName("ItemDescription");
       this.draggingItemPanel = this.inventoryMainPanel
@@ -115,9 +121,9 @@ export default class PlayerInventory extends cc.Component {
 
   generateSlots(): void {
     const scene = cc.director.getScene();
-    for (let x = 0; x < this.slotsCount; x++) {
-      let node = null;
-      if (this.isLocalPlayer) {
+    if (this.isLocalPlayer) {
+      for (let x = 0; x < this.slotsCount; x++) {
+        let node = null;
         if (this.inventorySlotContainer) {
           node = cc.instantiate(this.slotPrefab);
           node.name = `Slot${x}`;
@@ -125,16 +131,35 @@ export default class PlayerInventory extends cc.Component {
         } else {
           cc.error("Inventory slots panel is not defind");
         }
+        this.inventory = [
+          ...this.inventory,
+          new Slot({
+            id: x,
+            item: null,
+            node: node,
+            playerInventory: this.node.getComponent(PlayerInventory),
+          }),
+        ];
       }
-      this.inventory = [
-        ...this.inventory,
-        new Slot({
-          id: x,
-          item: null,
-          node: node,
-          playerInventory: this.node.getComponent(PlayerInventory),
-        }),
-      ];
+      for (let i = 0; i < 12; i++) {
+        let node = null;
+        if (this.equipmentSlotContainer) {
+          node = cc.instantiate(this.slotPrefab);
+          node.name = `Slot${i}`;
+          node.parent = this.equipmentSlotContainer;
+        } else {
+          cc.error("Equipment slots panel is not defind");
+        }
+        this.equipment = [
+          ...this.equipment,
+          new Slot({
+            id: i,
+            item: null,
+            node: node,
+            playerInventory: this.node.getComponent(PlayerInventory),
+          }),
+        ];
+      }
     }
   }
 
